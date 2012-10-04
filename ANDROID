@@ -1,0 +1,36 @@
+== Simple Build Step ==
+
+run : ndk-build.cmd
+
+If some new files were added :
+make Android.mk
+ndk-build.cmd
+
+If something else important occur, you can build follow the Original Build Steps.
+
+== Original Build Steps ==
+
+1. ./configure to create Makefile
+
+2. Add the content below to the end of Makefile.
+Android.mk: Makefile
+	androgenizer -:PROJECT ctags \
+	\
+	-:REL_TOP $(top_srcdir) -:ABS_TOP $(abs_top_srcdir) \
+	-:EXECUTABLE ctags \
+	-:SOURCES $(SOURCES) \
+	-:CFLAGS -DHAVE_CONFIG_H -DINTERNAL_SORT \
+> $@
+
+3. generate Android.mk
+make Android.mk
+
+4. fake this path as android project
+touch AndroidManifest.xml
+
+5. fake a jni/Android.mk
+the content is:
+include Android.mk
+
+6. build ctags compatible with Android
+ndk-build.cmd
